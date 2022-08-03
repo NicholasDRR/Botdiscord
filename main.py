@@ -133,4 +133,5 @@ async def horario_atual():
 
 
 # Executa o bot
-bot.run('OTkxNzQyNjMwOTI3MDE2MDg3.GJamxS.7tdXXtIUrq9QG3yx3XnTcsbS49Xu9v-iSWX8B0')
+# Resetar token toda vez que divulgar o código
+bot.run('OTkxNzQyNjMwOTI3MDE2MDg3.Gr5YCn.9KLDeQsMfGM2agATbqpMQytMp5cKMyTyhnyQVg')
