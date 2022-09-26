@@ -1,11 +1,13 @@
 import datetime
-
 import discord
 import requests
 from discord.ext import commands, tasks
+import asyncio
 
+# Permissões
+intents = discord.Intents.all()
 # Prefixo do bot
-bot = commands.Bot('-')
+bot = commands.Bot(command_prefix='-', intents=intents)
 
 
 # Ligando o bot
@@ -19,29 +21,29 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
-    if 'viado' in message.content:  # Filtra a mensagem e se for 'viado' ela é apagada
+    if 'palavrao' in message.content:  # Filtra a mensagem e se for 'palavrao' ela é apagada
         await message.channel.send(f'Por favor, {message.author.name}, não ofenda os demais usuários')
         await message.delete()
     if 'horario' in message.content:  # Ativa a função horario_atual digitando 'horario'
         horario_atual.start()
-    if 'pare' in message.content:  # Para função horario_atual digitando 'pare'
+    if 'parar' in message.content:  # Para função horario_atual digitando 'pare'
         horario_atual.stop()
     await bot.process_commands(message)
 
 
 # Evento de reações
-@bot.event
-async def on_reaction_add(reaction, user):
-    if reaction.emoji == '👍':
-        role = user.guild.get_role(991789476265328790)
-        await user.add_roles(role)
-    elif reaction.emoji == '👎':
-        role = user.guild.get_role(991789729936838707)
-        await user.add_roles(role)
+# @bot.event
+# async def on_reaction_add(reaction, user):
+#    if reaction.emoji == '👍':
+#        role = user.guild.get_role(991789476265328790)
+#        await user.add_roles(role)
+#    elif reaction.emoji == '👎':
+#        role = user.guild.get_role(991789729936838707)
+#        await user.add_roles(role)
 
 
 # Comando -oi
-@bot.command(name='oi')
+@bot.command(name='Saudação', help='Responde educadamente caso digam "oi". Argumentos: oi')
 async def send_hello(ctx):
     name = ctx.author.name
     response = 'Olá, ' + name
@@ -49,7 +51,7 @@ async def send_hello(ctx):
 
 
 # Comando -calcular (Faz qualquer cálculo desejado pelo usuário)
-@bot.command(name='calcular')
+@bot.command(name='Calcular', help='Calcula expressões matemáticas. Argumentos: Expressão')
 async def calcular_expressao(ctx, *expressao):
     expressao = ''.join(expressao)
     resposta = eval(expressao)
@@ -57,7 +59,7 @@ async def calcular_expressao(ctx, *expressao):
 
 
 # Comando -binance (Mostra o valor de um par de moedas)
-@bot.command()
+@bot.command(help='Verifica o preço de um par na binance. Argumentos: moeda, base')
 async def binance(ctx, coin, base):
     try:
         resposta = requests.get(f'https://api.binance.com/api/v3/ticker/price?symbol={coin.upper()}{base.upper()}')
@@ -75,7 +77,7 @@ async def binance(ctx, coin, base):
 
 
 # Comando -segredo (Envia uma mensagem privada ao usuário)
-@bot.command(name='segredo')
+@bot.command(name='Segredo ', help='Envia uma mensagem secreta no chat particular. Argumentos: segredo')
 async def segredo(ctx):
     try:
         await ctx.author.send('Sou um bot em desenvolvimento...')
@@ -84,7 +86,7 @@ async def segredo(ctx):
 
 
 # Comando -foto (Gera uma foto aleatória)
-@bot.command(name='foto')
+@bot.command(name='Foto', help='Busca uma imagem aleatória. Argumentos: foto')
 async def imagem(ctx):
     url = 'https://picsum.photos/1920/1080'
     embed_imagem = discord.Embed(
@@ -105,7 +107,7 @@ async def imagem(ctx):
 
 
 # Comando -copiar (Copia a mensagem do usuário e envia)
-@bot.command(name='copiar')
+@bot.command(name='Copiar', help='Copia a mensagem do autor. Argumentos: copiar')
 async def copiarmsg(ctx, *arg):
     await ctx.send(f'{len(arg)} arguments: {", ".join(arg)}')
 
@@ -128,10 +130,10 @@ async def sair(ctx):
 async def horario_atual():
     now = datetime.datetime.now()
     now = now.strftime('%d/%m/%Y as %H:%M:%S')
-    channel = bot.get_channel(991755353760993280)
+    channel = bot.get_channel(735474732631195719)
     await channel.send('Data atual: ' + now)
 
 
 # Executa o bot
 # Resetar token toda vez que divulgar o código
-bot.run('OTkxNzQyNjMwOTI3MDE2MDg3.Gr5YCn.9KLDeQsMfGM2agATbqpMQytMp5cKMyTyhnyQVg')
+bot.run('OTkxNzQyNjMwOTI3MDE2MDg3.Gjklle.PZQ9w3XBJGPZniX1ctzlMbfXsk4Zfu9WhHw3dY')
