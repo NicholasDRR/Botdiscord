@@ -1,20 +1,25 @@
 import datetime
 import discord
 import requests
-from discord.ext import commands, tasks
-import asyncio
+from discord.ext import commands, tasks 
+import dotenv
+from dotenv import load_dotenv
+import os
+
+# Token do bot
+load_dotenv()
+token = os.getenv('token')
 
 # Permissões
-intents = discord.Intents.all()
+intents = discord.Intents.default()
+intents.members = True
 # Prefixo do bot
 bot = commands.Bot(command_prefix='-', intents=intents)
-
 
 # Ligando o bot
 @bot.event
 async def on_ready():
     print(f'Estou pronto! Estou conectado como {bot.user}')
-
 
 # Evento de mensagens
 @bot.event
@@ -30,7 +35,6 @@ async def on_message(message):
         horario_atual.stop()
     await bot.process_commands(message)
 
-
 # Evento de reações
 # @bot.event
 # async def on_reaction_add(reaction, user):
@@ -41,7 +45,6 @@ async def on_message(message):
 #        role = user.guild.get_role(991789729936838707)
 #        await user.add_roles(role)
 
-
 # Comando -oi
 @bot.command(name='Saudação', help='Responde educadamente caso digam "oi". Argumentos: oi')
 async def send_hello(ctx):
@@ -49,14 +52,12 @@ async def send_hello(ctx):
     response = 'Olá, ' + name
     await ctx.send(response)
 
-
 # Comando -calcular (Faz qualquer cálculo desejado pelo usuário)
 @bot.command(name='Calcular', help='Calcula expressões matemáticas. Argumentos: Expressão')
 async def calcular_expressao(ctx, *expressao):
     expressao = ''.join(expressao)
     resposta = eval(expressao)
     await ctx.send('A resposta é ' + str(resposta))
-
 
 # Comando -binance (Mostra o valor de um par de moedas)
 @bot.command(help='Verifica o preço de um par na binance. Argumentos: moeda, base')
@@ -75,7 +76,6 @@ async def binance(ctx, coin, base):
         await ctx.send(f"Ops...Deu algum erro!")
         print(error)
 
-
 # Comando -segredo (Envia uma mensagem privada ao usuário)
 @bot.command(name='Segredo ', help='Envia uma mensagem secreta no chat particular. Argumentos: segredo')
 async def segredo(ctx):
@@ -83,7 +83,6 @@ async def segredo(ctx):
         await ctx.author.send('Sou um bot em desenvolvimento...')
     except discord.errors.Forbidden:
         await ctx.send('Não posso te contar o segredo, Habilite receber mensagens de desconhecidos.')
-
 
 # Comando -foto (Gera uma foto aleatória)
 @bot.command(name='Foto', help='Busca uma imagem aleatória. Argumentos: foto')
@@ -105,12 +104,10 @@ async def imagem(ctx):
 
     await ctx.send(embed=embed_imagem)
 
-
 # Comando -copiar (Copia a mensagem do usuário e envia)
 @bot.command(name='Copiar', help='Copia a mensagem do autor. Argumentos: copiar')
 async def copiarmsg(ctx, *arg):
     await ctx.send(f'{len(arg)} arguments: {", ".join(arg)}')
-
 
 # Comando -entrar (Entra na chamada do usuário)
 @bot.command()
@@ -118,12 +115,10 @@ async def entrar(ctx):
     channel = ctx.author.voice.channel
     await channel.connect()
 
-
 # Comando -sair (Sai da chamada do usuário)
 @bot.command()
 async def sair(ctx):
     await ctx.voice_client.disconnect()
-
 
 # Comando - horario (Envia data atual e horário formatados)
 @tasks.loop(seconds=2)
@@ -133,7 +128,6 @@ async def horario_atual():
     channel = bot.get_channel(735474732631195719)
     await channel.send('Data atual: ' + now)
 
-
 # Executa o bot
 # Resetar token toda vez que divulgar o código
-bot.run('OTkxNzQyNjMwOTI3MDE2MDg3.Gjklle.PZQ9w3XBJGPZniX1ctzlMbfXsk4Zfu9WhHw3dY')
+bot.run(token)
